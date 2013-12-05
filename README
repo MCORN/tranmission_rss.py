@@ -1,0 +1,13 @@
+TVTRss - RSS torrent downloader for Transmission 
+
+This script will check your RSS torrent feed url, grab the URL to each available torrent and add them to transmission via the transmission RPC
+
+---------------------------------
+Required python modules
+---------------------------------
+feedparser
+difflib
+urllib
+urllib2
+transmissionrpc
+os
