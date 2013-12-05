@@ -6,6 +6,8 @@ This script will check your RSS torrent feed url, grab the URL to each available
 
 The script is designed to work with transmission-daemon on a headless server but it should work with the GUI version on a desktop. (not tested)
 
+After each check of the feed, a history file is created to prevent the same files being added again and again. 
+
 ---------------------------------
 Required python libs
 ---------------------------------
