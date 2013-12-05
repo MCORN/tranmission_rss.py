@@ -1,14 +1,13 @@
 TVTRss - RSS torrent downloader for Transmission-daemon
 
-Transmission does not support RSS feeds, neither in the GUI nor the daemon so I wrote this script to fetch torrents from my 
-favourite site. 
+Transmission does not support RSS feeds, neither in the GUI nor the daemon so I wrote this script to fetch torrents from my favourite site. 
 
 This script will check your RSS torrent feed url, grab the URL to each available torrent and add them to transmission via the transmission RPC
 
 The script is designed to work with transmission-daemon on a headless server but it should work with the GUI version on a desktop. (not tested)
 
 ---------------------------------
-Required python modules
+Required python libs
 ---------------------------------
 feedparser
 difflib
@@ -16,3 +15,11 @@ urllib
 urllib2
 transmissionrpc
 os
+
+---------------------------------
+Install instruction
+---------------------------------
+Put the script where you want it to run from.
+Make script executable (debian - chmod a+x transmission_rss.py).
+Change the required details at the top of the file.
+Add your file to your crontab to run when you want it to
