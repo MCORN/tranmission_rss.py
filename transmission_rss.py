@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
 # User details
-# Add the url to your feed. NOTE: This has only been tested on the favourites feed from tvtorrents.com but it should work with other feeds
+# Add the url to your feed. NOTE: This has only been tested on the favourites feed from tvtorrents.com and showrss.info but it should work with other feeds
 feed_url = "enter your feed url here"
 hist = "/downloads/logs/rss/rss-hist.txt"		# Location of history file
 inc = "/downloads/logs/rss/rss-inc.txt"		# Location of incoming links file
-diff = "/downloads/logs/rss/rss-diff.txt"		# Location of difference file. 
+diff = "/downloads/logs/rss/rss-diff.txt"		# Location of difference file.
 
 # Transmission RPC details
 # Fill in your transmission details below
 USER = 'username'		# Username
 PASS = 'password'		# Password
-HOST = 'localhost'		# The remote host
+HOST = 'localhost'		# The Transmission host (remote or local)
 PORT = '9091'			# The same port as used by the server
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ if not os.path.exists(diff):
 
 # Parse the feed url given in the user details section.
 feed = feedparser.parse(feed_url)
-# Strip all the unnecessary data and grab the links 
+# Strip all the unnecessary data and grab the links
 with open(inc, 'w+') as incoming_file:
 	for post in feed.entries:
 		incoming_file.write(post.link + "\n")
@@ -45,7 +45,7 @@ with open(inc, 'w+') as incoming_file:
 		#post.comments
 		#post.pubDate
 
-# Check the incoming file against the history file. If there is a differece, write it to the diff file. 
+# Check the incoming file against the history file. If there is a differece, write it to the diff file.
 def build_set(inc):
     # A set stores a collection of unique items.  Both adding items and searching for them
     # are quick, so it's perfect for this application.
@@ -69,7 +69,7 @@ with open(diff, 'w+') as difference:
 
    for res in (set_more - set_del):
       # The - computes the elements in set_more not in set_del.
-      difference.write(" ".join(res) + "\n") 
+      difference.write(" ".join(res) + "\n")
 
 # Use contents of diff file and add them to transmission via the rpc
 # Connect to the transmission RPC server
@@ -77,8 +77,11 @@ tc = transmissionrpc.Client(HOST, port=PORT, user=USER, password=PASS)
 # Open the diff file and add the contents (links) to transmission
 f = open(diff)
 for line in iter(f):
-	# Add torrents to transmission via the rpc
-	tc.add_torrent(line)
+    # Add torrents to transmission via the rpc. If one fails, move on to the next one.
+    try:
+	    tc.add_torrent(line)
+    except:
+		pass
 f.close()
 
 # Move contents of diff file and append to history file, then reset diff file
